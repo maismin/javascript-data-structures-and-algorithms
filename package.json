@@ -1,0 +1,25 @@
+{
+  "name": "javascript-data-structures-and-algorithms",
+  "version": "1.0.0",
+  "description": "Respository contains data strutures and algorithms written in JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jsdoc": "jsdoc data-structures/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maismin/javascript-data-structures-and-algorithms.git"
+  },
+  "author": "Si Mai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maismin/javascript-data-structures-and-algorithms/issues"
+  },
+  "homepage": "https://github.com/maismin/javascript-data-structures-and-algorithms#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "jsdoc": "^3.6.3"
+  }
+}
