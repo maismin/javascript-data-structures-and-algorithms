@@ -7,12 +7,12 @@ class PriorityNode {
   /**
    * Creates an instance of PriorityNode
    * 
-   * @param {*} data
+   * @param {*} name
    * @param {number} priority
    * @memberof PriorityNode
    */
-  constructor(data, priority) {
-    this.data = data
+  constructor(name, priority) {
+    this.name = name
     this.priority = priority
   }
   

@@ -1,6 +1,5 @@
 const Queue = require('../queue/queue')
 const PriorityQueue = require('../tree/min-binary-heap')
-const PriorityNode = require('../node/priority-node')
 
 /**
  * Class representing a graph
@@ -143,7 +142,7 @@ class Graph {
     queue.enqueue(vertex)
 
     while (!queue.isEmpty()) {
-      const v = queue.dequeue().data
+      const v = queue.dequeue().name
       results.push(v)
       this.adjacencyList[v].forEach(neighbor => {
         if (!visited.has(neighbor.node)) {
@@ -185,21 +184,11 @@ class Graph {
 
     // Insert all the distances for each vertex into the priority queue
     for (const v in distances) {
-      priorityQueue.insert(new PriorityNode(v, distances[v]))
+      priorityQueue.insert(v, distances[v])
     }
 
     while (priorityQueue.length) {
-      const u = priorityQueue.extractMin().data
-
-      if (u === destination) {
-        let v = destination
-
-        while (v) {
-          path.push(v)
-          v = predecessors[v]
-        }
-        break
-      }
+      const u = priorityQueue.extractMin().name
       
       this.adjacencyList[u].forEach(node => {
         const v = node.node
@@ -210,11 +199,18 @@ class Graph {
         if (distances[v] > newDistance) {
           distances[v] = newDistance
           predecessors[v] = u
-          priorityQueue.insert(new PriorityNode(v, distances[v]))
+
+          priorityQueue.decreasePriority(priorityQueue.pointer[v], distances[v])
         }
       })
     }
     
+    let v = destination
+
+    while (v) {
+      path.push(v)
+      v = predecessors[v]
+    }
     return path.reverse()
   }
 }

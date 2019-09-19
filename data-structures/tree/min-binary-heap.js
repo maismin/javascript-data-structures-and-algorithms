@@ -1,3 +1,4 @@
+const PriorityNode = require('../node/priority-node')
 /**
  * Class representing a min binary heap
  *
@@ -13,6 +14,7 @@ class MinBinaryHeap {
     this.arr = []
     this.length = this.arr.length
     this.heapSize = 0
+    this.pointer = {}
   }
 
   /**
@@ -78,9 +80,11 @@ class MinBinaryHeap {
     // Swap the element at index position with the largest, and call minHeapify to ensure
     // the max-heap property is maintained
     if (largest !== index) {
-      const tmp = this.arr[index]
-      this.arr[index] = this.arr[largest]
-      this.arr[largest] = tmp
+      [this.arr[index], this.arr[largest]] = [this.arr[largest], this.arr[index]]
+
+      this.pointer[this.arr[largest].name] = largest
+      this.pointer[this.arr[index].name] = index
+
       this.minHeapify(largest)
     }
   }
@@ -94,6 +98,12 @@ class MinBinaryHeap {
    */
   buildMinHeap(arr) {
     this.arr = arr
+
+    this.pointer = {}
+    for (let idx in arr) {
+      this.pointer[this.arr[idx].name] = idx
+    }
+
     this.length = this.arr.length
     this.heapSize = this.arr.length
     for (let i = Math.floor(this.length/2) - 1; i >= 0; i--) {
@@ -126,15 +136,16 @@ class MinBinaryHeap {
       throw new Error('heap underflow')
     }
 
-    const min = this.minimum()
-
+    const node = this.minimum()
+    delete this.pointer[node.name]
     this.arr[0] = this.arr[this.heapSize - 1]
+    this.pointer[this.arr[0].name] = 0
     this.heapSize -= 1
     this.arr.pop()
     this.length = this.arr.length
     this.minHeapify(0)
 
-    return min
+    return node
   }
   
   /**
@@ -145,15 +156,20 @@ class MinBinaryHeap {
    * @param {*} value
    * @memberof MinBinaryHeap
    */
-  decreaseValue(index, value) {
+  decreasePriority(index, value) {
     if (value > this.arr[index]) {
       throw new Error('new value is bigger than current value')
     }
-    this.arr[index] = value
+
+    this.arr[index].priority = value
     while (index > 0 && this.arr[this.parent(index)] > this.arr[index]) {
-      const tmp = this.arr[index]
-      this.arr[index] = this.arr[this.parent(index)]
-      this.arr[this.parent(index)] = tmp
+      // swap
+      [this.arr[index], this.arr[this.parent(index)]] = [this.arr[this.parent(index)], this.arr[index]]
+      
+      // update pointer
+      this.pointer[this.arr[index].name] = index
+      this.pointer[this.arr[this.parent(index)].name] = this.parent(index)
+
       index = this.parent(index)
     }
   }
@@ -162,14 +178,16 @@ class MinBinaryHeap {
    * Add element into heap
    * Running time of O(log n)
    *
-   * @param {*} value
+   * @param {String} name
+   * @param {number} value
    * @memberof MinBinaryHeap
    */
-  insert(value) {
-    this.arr.push(Infinity)
+  insert(name, value) {
+    this.arr.push(new PriorityNode(name, Infinity))
     this.length = this.arr.length
     this.heapSize += 1
-    this.decreaseValue(this.heapSize - 1, value)
+    this.pointer[name] = this.heapSize - 1
+    this.decreasePriority(this.heapSize - 1, value)
   }
 }
 
