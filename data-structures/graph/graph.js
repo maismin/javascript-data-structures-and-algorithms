@@ -15,6 +15,8 @@ class Graph {
    */
   constructor(weighted = false, directed = false) {
     this.adjacencyList = {}
+    this.weighted = weighted
+    this.directed = directed
   }
 
   /**
@@ -52,6 +54,7 @@ class Graph {
   addEdge(v1, v2, weight = 1) {
     this.adjacencyList[v1].push({ node: v2, weight })
     if (!this.directed) {
+      console.log('pushed')
       this.adjacencyList[v2].push({ node: v1, weight })
     }
   }
@@ -205,6 +208,7 @@ class Graph {
       })
     }
     
+    console.log(predecessors)
     let v = destination
 
     while (v) {
