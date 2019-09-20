@@ -39,7 +39,7 @@ class Graph {
    */
   removeVertex(vertex) {
     for (let adjacentVertex of this.adjacencyList[vertex]) {
-      this.removeEdge(vertex, adjacentVertex.node)
+      this.removeEdge(vertex, adjacentVertex.name)
     }
     delete this.adjacencyList[vertex]
   }
@@ -52,10 +52,10 @@ class Graph {
    * @memberof Graph
    */
   addEdge(v1, v2, weight = 1) {
-    this.adjacencyList[v1].push({ node: v2, weight })
+    this.adjacencyList[v1].push({ name: v2, weight })
     if (!this.directed) {
       console.log('pushed')
-      this.adjacencyList[v2].push({ node: v1, weight })
+      this.adjacencyList[v2].push({ name: v1, weight })
     }
   }
 
@@ -68,11 +68,11 @@ class Graph {
    */
   removeEdge(v1, v2) {
     this.adjacencyList[v1] = this.adjacencyList[v1].filter(
-      v => v.node !== v2
+      v => v.name !== v2
     )
     if (!this.directed) {
       this.adjacencyList[v2] = this.adjacencyList[v2].filter(
-        v => v.node !== v1
+        v => v.name !== v1
       )
     }
   }
@@ -93,8 +93,8 @@ class Graph {
       visited.add(vertex)
 
       this.adjacencyList[vertex].forEach(neighbor => {
-        if (!visited.has(neighbor.node)) {
-          depthFirstHelper(neighbor.node, results, visited)
+        if (!visited.has(neighbor.name)) {
+          depthFirstHelper(neighbor.name, results, visited)
         }
       })
     }
@@ -120,9 +120,9 @@ class Graph {
       const v = stack.pop()
       results.push(v)
       this.adjacencyList[v].forEach(neighbor => {
-        if (!visited.has(neighbor.node)) {
-          visited.add(neighbor.node)
-          stack.push(neighbor.node)
+        if (!visited.has(neighbor.name)) {
+          visited.add(neighbor.name)
+          stack.push(neighbor.name)
         }
       })
     }
@@ -148,9 +148,9 @@ class Graph {
       const v = queue.dequeue().name
       results.push(v)
       this.adjacencyList[v].forEach(neighbor => {
-        if (!visited.has(neighbor.node)) {
-          visited.add(neighbor.node)
-          queue.enqueue(neighbor.node)
+        if (!visited.has(neighbor.name)) {
+          visited.add(neighbor.name)
+          queue.enqueue(neighbor.name)
         }
       })
     }
@@ -164,7 +164,7 @@ class Graph {
    *
    * @param {*} source
    * @param {*} destination
-   * @returns {[]}
+   * @returns {[]} path
    * @memberof Graph
    */
   dijkstra(source, destination) {
@@ -194,7 +194,7 @@ class Graph {
       const u = priorityQueue.extractMin().name
       
       this.adjacencyList[u].forEach(node => {
-        const v = node.node
+        const v = node.name
         const vWeight = node.weight
         const newDistance = distances[u] + vWeight
 
@@ -207,8 +207,7 @@ class Graph {
         }
       })
     }
-    
-    console.log(predecessors)
+
     let v = destination
 
     while (v) {
