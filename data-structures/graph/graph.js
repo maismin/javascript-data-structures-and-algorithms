@@ -159,22 +159,17 @@ class Graph {
   }
 
   /**
-   * Dijkstra's shortest path algorithm between source and destination vertex.
-   * Assumes that the weights are non-negative
+   * Returns an array containing two maps
+   * 1) distances - keeps track of the shortest distance from source to every other vertex
+   * 2) predecessor - the predecessor of every vertex for shortest distance from source
    *
    * @param {*} source
-   * @param {*} destination
-   * @returns {[]} path
+   * @returns
    * @memberof Graph
    */
-  dijkstra(source, destination) {
-    // initialize hash tables
-    // distances - keeps track of distances from source to any other vertex
-    // predecessors - enables us to build the path from source to destination
+  _singleSourceInitialize(source) {
     const distances = {}
     const predecessors = {}
-    const priorityQueue = new PriorityQueue()
-    const path = []
 
     // Set all distances to infinity and predecessors to null
     for (const v in this.adjacencyList) {
@@ -184,6 +179,23 @@ class Graph {
 
     // Set distance of source to zero
     distances[source] = 0
+
+    return [distances, predecessors]
+  }
+
+  /**
+   * Dijkstra's shortest path algorithm between source and destination vertex.
+   * Assumes that the weights are non-negative
+   *
+   * @param {*} source
+   * @param {*} destination
+   * @returns {[]} path
+   * @memberof Graph
+   */
+  dijkstra(source, destination) {
+    const path = []
+    const priorityQueue = new PriorityQueue()
+    const [distances, predecessors] = this._singleSourceInitialize(source)
 
     // Insert all the distances for each vertex into the priority queue
     for (const v in distances) {
