@@ -228,6 +228,55 @@ class Graph {
     }
     return path.reverse()
   }
+
+  /**
+   * Bellman-Ford's algorithm for finding shortest path on a weighted graph
+   * that might contain negative edges. Returns false if there is a negative-
+   * weight cycle that is reachable from the source. Returns true and the path
+   * from source to destination otherwise.
+   *
+   * @param {*} source
+   * @param {*} destination
+   * @returns {[boolean, []]}
+   * @memberof Graph
+   */
+  belllmanFord(source, destination) {
+    const path = []
+    const [distances, predecessors] = this._singleSourceInitialize(source)
+
+    for (let i = 1; i < Object.keys(this.adjacencyList).length; i++) {
+      for (let u in this.adjacencyList) {
+        for (let edge of this.adjacencyList[u]) {
+          const v = edge.name
+          const weight = edge.weight
+          const newDistance = distances[u] + weight
+
+          if (newDistance < distances[v]) {
+            distances[v] = newDistance
+            predecessors[v] = u
+          }
+        }
+      }
+    }
+
+    for (let u in this.adjacencyList) {
+      for (let edge of this.adjacencyList[u]) {
+        const v = edge.name
+        const weight = edge.weight
+
+        if (distances[v] > distances[u] + weight) {
+          return [false, path]
+        }
+      }
+    }
+    
+    let v = destination
+    while (v) {
+      path.push(v)
+      v = predecessors[v]
+    }
+    return [true, path.reverse()]
+  }
 }
 
 module.exports = Graph
