@@ -48,7 +48,7 @@ class RedBlackTree {
   /**
    * Prints the parent after the children
    *
-   * @param {*} [node=this.root]
+   * @param {RedBlackNode} [node=this.root]
    * @memberof RedBlackTree
    */
   postOrder(node = this.root) {
@@ -92,7 +92,7 @@ class RedBlackTree {
   /**
    * Returns the node that contains the data
    *
-   * @param {*} data
+   * @param {number} data
    * @param {RedBlackNode} [node=this.root]
    * @returns
    * @memberof RedBlackTree
@@ -292,7 +292,7 @@ class RedBlackTree {
   /**
    * Restore the red black properties of the tree after inserting a new node
    *
-   * @param {*} z
+   * @param {RedBlackNode} z
    * @memberof RedBlackTree
    */
   insertFixUp(z) {
