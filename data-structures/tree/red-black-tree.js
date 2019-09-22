@@ -333,6 +333,139 @@ class RedBlackTree {
     }
     this.root.color = RedBlackNode.BLACK
   }
+
+  /**
+   * Replace the subtree rooted at node u with the subtree rooted at node v
+   * Transplant does not update v's left or right, doing so is the caller's 
+   * responsibilities
+   *
+   * @param {RedBlackNode} u
+   * @param {RedBlackNode} v
+   * @memberof RedBlackTree
+   */
+  transplant(u, v) {
+    if (u.parent === this.NIL) {
+      this.root = v
+    } else if (u === u.parent.left) {
+      u.parent.left = v
+    } else {
+      u.parent.right = v
+    }
+    v.parent = u.parent
+  }
+
+  /**
+   * Deletes the node z
+   *
+   * @param {RedBlackNode} z
+   * @memberof RedBlackTree
+   */
+  delete(z) {
+    let x
+    let y = z
+    let yOriginalColor = y.color
+
+    if (z.left === this.NIL) {
+      x = z.right
+      this.transplant(z, z.right)
+    } else if (z.right === this.NIL) {
+      x = z.left
+      this.transplant(z, z.left)
+    } else {
+      y = this.minimum(z.right)
+      yOriginalColor = y.color
+      x = y.right
+      if (y.parent === z) {
+        x.parent = y
+      } else {
+        this.transplant(y, y.right)
+        y.right = z.right
+        y.right.parent = y
+      }
+      this.transplant(z, y)
+      y.left = z.left
+      y.left.parent = y
+      y.color = z.color
+    }
+
+    if (yOriginalColor === RedBlackNode.BLACK) {
+      this.deleteFixUp(x)
+    }
+  }
+
+  /**
+   * Restores the red black properties violated by deleting a node
+   *
+   * @param {RedBlackNode} x
+   * @memberof RedBlackTree
+   */
+  deleteFixUp(x) {
+    while (x !== this.root && x.color === RedBlackNode.BLACK) {
+      if (x === x.parent.left) {
+        let w = x.parent.right
+        // Case 1
+        if (w.color === RedBlackNode.RED) {
+          w.color = RedBlackNode.BLACK
+          x.parent.color = RedBlackNode.RED
+          this.leftRotate(x.parent)
+          w = x.parent.right
+        }
+
+        // Case 2
+        if (w.left.color === RedBlackNode.BLACK && w.right.color === RedBlackNode.BLACK) {
+          w.color = RedBlackNode.RED
+          x = x.parent
+        } else {
+        // Case 3
+          if (w.right.color === RedBlackNode.BLACK) {
+            w.left.color = RedBlackNode.BLACK
+            w.color = RedBlackNode.RED
+            this.rightRotate(w)
+            w = x.parent.right
+          }
+        
+        // Case 4
+          w.color = x.parent.color
+          x.parent.color = RedBlackNode.BLACK
+          w.right.color = RedBlackNode.BLACK
+          this.leftRotate(x.parent)
+          x = this.root
+        }
+      } else {
+        let w = x.parent.left
+        // Case 5
+        if (w.color === RedBlackNode.RED) {
+          w.color = RedBlackNode.BLACK
+          x.parent.color = RedBlackNode.RED
+          this.rightRotate(x.parent)
+          w = x.parent.left
+        }
+
+        // Case 6
+        if (w.left.color === RedBlackNode.BLACK && w.right.color === RedBlackNode.BLACK) {
+          w.color = RedBlackNode.RED
+          x = x.parent
+        } else {
+        // Case 7
+          if (w.left.color === RedBlackNode.BLACK) {
+            w.right.color = RedBlackNode.BLACK
+            w.color = RedBlackNode.RED
+            this.leftRotate(w)
+            w = x.parent.left
+          }
+        
+        // Case 8
+          w.color = x.parent.color
+          x.parent.color = RedBlackNode.BLACK
+          w.left.color = RedBlackNode.BLACK
+          this.rightRotate(x.parent)
+          x = this.root
+        }
+      }
+    }
+
+    x.color = RedBlackNode.BLACK
+  }
 }
 
 module.exports = RedBlackTree
