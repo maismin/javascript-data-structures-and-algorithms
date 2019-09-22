@@ -142,6 +142,62 @@ class RedBlackTree {
   }
 
   /**
+   * Return the predecessor node in the sorted order
+   * determined by the inorder tree traversal
+   *
+   * @param {RedBlackNode} node
+   * @returns {RedBlackNode}
+   * @memberof RedBlackTree
+   */
+  predecessor(node) {
+    if (node === this.NIL) {
+      return node
+    }
+
+    if (node.left !== this.NIL) {
+      return this.maximum(node.left)
+    }
+
+    let p = node.parent
+    let c = node
+
+    while (p !== null && c === p.left) {
+      c = p
+      p = c.parent
+    }
+
+    return p
+  }
+  
+  /**
+   * Return the successor node in the sorted order
+   * determined by the inorder tree traversal
+   *
+   * @param {RedBlackNode} node
+   * @returns {RedBlackNode}
+   * @memberof RedBlackTree
+   */
+  successor(node) {
+    if (node === this.NIL) {
+      return node
+    }
+
+    if (node.right !== this.NIL) {
+      return this.minimum(node.right)
+    }
+
+    let p = node.parent
+    let c = node
+
+    while (p !== null && c === p.right) {
+      c = p
+      p = c.parent
+    }
+
+    return p
+  }
+
+  /**
    * Local operation that rotates the node to the left.
    * Assumes that the node's right is not NIL and that the
    * root's parent is NIL
