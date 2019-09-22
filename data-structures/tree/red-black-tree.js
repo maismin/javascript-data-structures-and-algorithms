@@ -104,14 +104,14 @@ class RedBlackTree {
       }
     }
 
-    return (node === this.NIL) ? null : node
+    return node
   }
   
   /**
    * Returns the node with the minimum value
    *
    * @param {RedBlackNode} [node=this.root]
-   * @returns {(RedBlackNode|null)}
+   * @returns {RedBlackNode}
    * @memberof RedBlackTree
    */
   minimum(node = this.root) {
@@ -121,14 +121,14 @@ class RedBlackTree {
       }
     }
 
-    return (node === this.NIL) ? null : node
+    return node.data
   }
 
   /**
    * Returns the node with the maximum value
    *
    * @param {RedBlackNode} [node=this.root]
-   * @returns {(RedBlackNode|null)}
+   * @returns {RedBlackNode}
    * @memberof RedBlackTree
    */
   maximum(node = this.root) {
@@ -138,7 +138,7 @@ class RedBlackTree {
       }
     }
 
-    return (node === this.NIL) ? null : node
+    return node.data
   }
 
   /**
