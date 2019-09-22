@@ -53,7 +53,7 @@ class Queue {
   }
 
   /**
-   * Remove and return node from front of queue
+   * Remove and return data from front of queue
    *
    * @param {*} data
    * @returns {(Node|null)}
@@ -71,11 +71,10 @@ class Queue {
       this.last = null
     } else {
       this.first = this.first.next
-      removedNode.next = null
     }
 
     this.size -= 1
-    return removedNode
+    return removedNode.data
   }
 
   /**
