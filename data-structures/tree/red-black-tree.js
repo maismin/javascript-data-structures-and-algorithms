@@ -121,7 +121,7 @@ class RedBlackTree {
       }
     }
 
-    return node.data
+    return node
   }
 
   /**
@@ -138,7 +138,7 @@ class RedBlackTree {
       }
     }
 
-    return node.data
+    return node
   }
 
   /**
